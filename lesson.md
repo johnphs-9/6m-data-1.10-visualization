@@ -7,7 +7,7 @@
 | **Duration** | 180 minutes (including 2 × 10-min breaks) |
 | **Format** | Flipped Classroom + Guided Coding in Jupyter |
 | **Tools** | VS Code + `pds` conda environment |
-| **Notebook** | `notebooks/data_visualization_lesson.ipynb` |
+| **Notebooks** | `notebooks/Part_1_three_pillars.ipynb` → `Part_4_chart_choice.ipynb` (4 parts, see below) |
 | **Dataset** | The Daily Grind café chain — the same files and findings as Lesson 1.9 |
 
 ## Agenda
@@ -106,7 +106,9 @@ By the end of this session, you will be able to:
 **You will also need your Lesson 1.9 output.** The notebook loads `data/lesson19_decision.csv`. A copy
 is already in `data/` so you are not blocked, but if you ran 1.9 yourself, compare the two.
 
-Open `notebooks/data_visualization_lesson.ipynb` in VS Code and select the `pds` kernel.
+Open `notebooks/Part_1_three_pillars.ipynb` in VS Code and select the `pds` kernel. Each part
+notebook ends with a pointer to the next one (`Part_2_matplotlib_fundamentals.ipynb`,
+`Part_3_seaborn.ipynb`, `Part_4_chart_choice.ipynb`).
 
 ---
 

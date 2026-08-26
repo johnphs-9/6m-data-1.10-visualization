@@ -102,7 +102,14 @@ figure the whole session builds towards.
 
 - **[VS Code](https://code.visualstudio.com)** + Python + Jupyter extensions *(recommended)*.
 - **[Google Colab](https://colab.research.google.com)** *(alternative)*.
-- **Notebook:** `notebooks/data_visualization_lesson.ipynb` — select the `pds` kernel in VS Code.
+- **Notebooks:** the lesson is split into four self-contained parts — open them in order,
+  selecting the `pds` kernel in VS Code:
+  1. `notebooks/Part_1_three_pillars.ipynb`
+  2. `notebooks/Part_2_matplotlib_fundamentals.ipynb`
+  3. `notebooks/Part_3_seaborn.ipynb`
+  4. `notebooks/Part_4_chart_choice.ipynb`
+  
+  (The original single notebook is kept for reference at `notebooks/_original/data_visualization_lesson.ipynb`.)
 - **Environment:** `conda env create -f environment.yml` then `conda activate pds`.
 - **Versions:** written for matplotlib 3.7 / seaborn 0.12 (the `pds` environment) and tested on
   newer versions too, so it also runs on Colab.
