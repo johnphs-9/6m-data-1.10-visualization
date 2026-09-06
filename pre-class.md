@@ -1,161 +1,225 @@
-# PART A: ESSENTIAL PRE-CLASS (30 minutes)
-## ⏱️ Quick Foundation Before Lesson 1.10
+# 📚 Pre-Class: Making Data Speak
 
-⏱️ **Estimated Duration:** 30 minutes
-**Prerequisites:** Lesson 1.9 — Advanced EDA
+⏱️ **Estimated Time:** 35–40 minutes
+**Prerequisites:** Lesson 1.9 — EDA Advanced
 
-> In Lesson 1.9 you transformed and aggregated data using groupby, pivot, melt, and time-series resampling. Now you'll learn how to *communicate* those findings visually. Data visualisation is where analysis becomes a story — this pre-class work gives you the design vocabulary to make that story clear and honest.
+> In Lesson 1.9 you found the answer: the café chain's flat revenue is Marina Bay collapsing while
+> Holland Village covers it up, and Marina Bay's fall is a step dated to the first week of November
+> 2024. You have the table. **Now you have twenty seconds of somebody's attention.**
+>
+> This lesson is about that twenty seconds. It is not decoration, and it is not the soft part of the
+> module — it is the part where analysis either changes a decision or doesn't.
 
-**Goal:** Build core vocabulary and concepts before working through the Python tools. No deep dives — just enough to understand *why* design choices matter.
+🎯 **Goal:** get the design vocabulary before the code, so every plotting choice in class has a reason
+behind it.
 
-**🎬 Watch This Video:** [The Architecture of Insight Data Visualisation & Storytelling](https://www.youtube.com/watch?v=-SaBG0sEtRA)
-
----
-
-## A.1: The Three Pillars of Visualization (10 mins)
-
-### 🧠 Pillar 1: PERCEPTION (How Humans See)
-
-**Key Concept: Pre-attentive Processing**
-- Your brain processes important visual elements in **200-500 milliseconds** (before you consciously "look")
-- Important insights should **jump out** without effort
-- Example: A red bar among gray bars catches your eye instantly
-
-**Key Concept: Cognitive Load**
-- Working memory can only hold **4-7 items** at once
-- Remove clutter; highlight only what matters
-- Result: Viewers understand faster with less frustration
-
-**What to watch for in the lesson:** When you see code that removes gridlines, limits colors, or reorganizes subplots — that's cognitive load management being applied in Python.
+🎬 Watch this video: [[L1.10 The 20 Second Window  Hacking Human Perception with Data]](https://youtu.be/YWIlp4dG8FY)
 
 ---
 
-### 🎨 Pillar 2: DESIGN (How to Show Data Honestly)
+## **0. The one rule (2 minutes)**
 
-**Chart Selection Rule:**
-| Goal | Chart | Why |
-|------|-------|-----|
-| Compare categories | Bar chart | Lengths are easy to compare |
-| Show trends over time | Line chart | Continuity shows flow |
-| Show correlation | Scatter plot | Position reveals relationships |
-| Show distribution | Box/Violin plot | Reveals median, quartiles, outliers |
+> **The chart is chosen by the message, not by taste.**
 
-**The Golden Rule of Honest Visualization:**
-❌ **NEVER:** Truncate bar chart axes (start anywhere but 0)  
-✅ **ALWAYS:** Bar charts must start at 0 for accurate magnitude comparison
+Write the sentence you want the audience to leave with, in words, *before* you touch any plotting code.
+Then the chart type follows almost mechanically:
 
-**Why?** Truncating distorts relative sizes and misleads viewers.
+| The sentence you want them to leave with | The chart |
+|---|---|
+| "X changed over time" | line |
+| "X is bigger than Y" | bar, starting at zero |
+| "X is made up of these parts" | stacked bar |
+| "X and Y move together" | scatter |
+| "X varies more than you think" | box, violin or histogram |
+| "the pattern differs by group" | small multiples with shared axes |
+
+Almost every bad chart you have seen was made the other way round: someone picked a chart type, then
+went looking for something to say with it.
 
 ---
 
-### 📖 Pillar 3: STORYTELLING (How to Communicate)
+## **1. Pillar 1 — Perception: how humans see (10 minutes)**
 
-**Three-Act Structure:**
+### Pre-attentive processing
+
+Your visual system registers colour, length and position in roughly **200–500 milliseconds** — *before*
+conscious attention arrives. One red bar among grey ones is found instantly and effortlessly.
+
+The practical rule: **use colour for the one thing that matters, and grey for everything else.** In
+class you will see the same five-line chart drawn twice — once with five bright colours, once with one
+red line and four grey. The second answers "which outlet is failing?" before you have read the title.
+
+> **Grey is not "hiding" data.** The grey lines still provide the context that makes the red one
+> meaningful — without them you cannot tell whether the red line is unusual. Grey keeps context without
+> spending attention on it.
+
+### Cognitive load
+
+Working memory holds about **four items** at once. Every extra line, colour, gridline and label spends
+part of a fixed budget. Removing clutter is not an aesthetic preference; it is buying back attention for
+the thing you want noticed.
+
+### The accuracy ranking
+
+Humans judge some visual channels far more accurately than others:
+
+**position ≈ length ≫ angle ≈ area ≫ colour intensity ≫ volume**
+
+That single ranking explains most chart advice you will ever be given — including why bar charts beat
+pie charts, and why nothing good has ever come from a 3D exploding donut.
+
+---
+
+## **2. Pillar 2 — Design: showing data honestly (10 minutes)**
+
+### The golden rule, and *why* it exists
+
+❌ **Never truncate the axis of a bar chart.**
+✅ **Bars start at zero.**
+
+The reason matters more than the rule. A bar encodes its value as **length**. If the axis starts at
+180,000 instead of 0, the length is no longer proportional to the value, and the reader's eye is doing
+arithmetic on a false premise. In class you will see the same four numbers drawn twice: truncated,
+Marina Bay looks like it earns about a tenth of Raffles Place. It earns **66%** of it.
+
+**Line charts are different.** A line encodes *position* and is read for *change*, so truncating is
+often correct — it lets a real 3% movement be visible instead of flattened into a straight line.
+
+> **Bars start at zero. Lines start wherever the change is legible.**
+
+### Five mistakes to recognise
+
+| Mistake | Why it fails | Instead |
+|---|---|---|
+| Truncated bar axis | length no longer matches value | start at zero, or use a line/dot chart |
+| Pie chart with 6+ slices | angle-judging is inaccurate | horizontal bar chart, sorted |
+| Eight colours | blows the attention budget | one accent colour, the rest grey |
+| Title names the metric ("Monthly Revenue") | tells the reader nothing | title states the finding |
+| 3D anything | perspective distorts area and angle | 2D, always |
+
+---
+
+## **3. Pillar 3 — Storytelling: three acts (8 minutes)**
+
+A chart alone is evidence, not an argument. Wrap it in three sentences:
+
 ```
-ACT 1: BEGINNING (Set Context)
-  ↓ "Why should you care?"
-ACT 2: MIDDLE (Show Problem/Opportunity)  
-  ↓ "What does the data reveal?" (Use visualization here)
-ACT 3: END (Propose Action)
-  ↓ "What should we do next?"
+ACT 1 — CONTEXT      "Why should you care?"
+ACT 2 — FINDING      "Here is what the data shows"   <- the chart lives here
+ACT 3 — DECISION     "So here is the choice in front of you"
 ```
 
-**Example:**
-- **Act 1:** "Our sales grew 15%, BUT customer retention dropped 8%"
-- **Act 2:** "Analysis shows the loss concentrates in high-value customers"
-- **Act 3:** "Let's implement a retention program targeting them"
+Applied to the café chain — this is the actual script you will build in class:
+
+- **Act 1:** "Chain revenue has been flat for two quarters, so nothing looks urgent."
+- **Act 2:** "It is flat because two outlets cancel out. Marina Bay is down 28% year on year and
+  Holland Village is up 27%. Marina Bay's fall happened in one week last November, when a competitor
+  opened next door."
+- **Act 3:** "Marina Bay now spends 28% of its revenue on rent against 15% everywhere else. Before you
+  sign the lease, the question is whether that November step can be reversed."
+
+**Notice what Act 3 does not do.** It does not say "close Marina Bay". Your job is to make the
+comparison unavoidable; the decision belongs to the person carrying the risk. That distinction is what
+separates an analyst from someone with an agenda and a chart.
 
 ---
 
-## A.2: Common Mistakes to Avoid (10 mins)
+## **4. Know your audience (5 minutes)**
 
-**Mistake 1: Wrong Chart Type**
-- ❌ Using pie charts with 10+ slices (hard to compare)
-- ✅ Use bar chart instead
+Same analysis every time. Only the framing changes.
 
-**Mistake 2: Truncated Axes**
-- ❌ Bar chart Y-axis: 95-100% (exaggerates tiny differences)
-- ✅ Start at 0; if you must truncate, clearly mark it
+| Audience | Cares about | So the chart is | Detail |
+|---|---|---|---|
+| **Owner / executive** | the decision | one panel, finding as the title, cause annotated | high-level only |
+| **Manager** | what to change | the driver broken out, comparison to target | key drivers |
+| **Data team** | the method | small multiples, distributions, uncertainty shown | full |
+| **General public** | why it affects them | one simple comparison, no jargon | minimal |
 
-**Mistake 3: Too Much Color**
-- ❌ Using 8+ colors in one chart (overwhelming)
-- ✅ Limit to 3-5 colors max
-
-**Mistake 4: No Story**
-- ❌ Just showing a chart without explanation
-- ✅ Frame data in narrative: "Here's the problem, here's what it means, here's what to do"
-
-**Mistake 5: Forgetting Your Audience**
-- ❌ Same message for executives and data scientists
-- ✅ Executives care about ROI; Data scientists care about methodology
+Showing an executive the chart you built for the data team is the most common failure in this lesson,
+and it reads as "you did not think about me".
 
 ---
 
-## A.3: Know Your Audience (10 mins)
+## **5. Preparation checklist (2 minutes)**
 
-**Different audiences need different messages:**
-
-| Audience | Cares About | Your Message | Detail Level |
-|----------|-------------|--------------|--------------|
-| **Executive** | ROI, decision | "Impact on business, here's the choice" | High-level only |
-| **Manager** | Implementation | "This is what to do, here's the impact" | Key drivers highlighted |
-| **Data Team** | Methodology | "Here's how I analyzed it" | Full technical details |
-| **General Public** | Relevance, clarity | "Why it affects you, here's the key insight" | Simple, no jargon |
-
-**Before class:** Ask yourself: "Who are we talking to? What do they care about?"
+1. **Environment:** the `pds` conda environment. If it is not set up: `conda env create -f environment.yml`
+   then `conda activate pds`.
+2. **Check it works:** `import matplotlib.pyplot as plt; import seaborn as sns` — no errors means you
+   are ready.
+3. **Data:** already in `data/`, carried over from Lesson 1.9 along with your decision table.
+4. **Mindset:** several cells in class are deliberately bad charts. This is the one topic where
+   breaking things on purpose is the fastest way to learn.
 
 ---
 
-## ✅ Pre-Class Checklist (5 mins)
+## **🤖 AI Companion Exercise (recommended)**
 
-Before moving on, can you answer these?
+**Prompt 1 (critique):** "I have a bar chart of revenue for four shops where the y-axis starts at
+150,000 instead of 0. Explain to me, as if I were presenting it to a business owner, exactly how this
+misleads them and what they would wrongly conclude."
 
-- [ ] What is pre-attentive processing? Why does it matter?
-- [ ] Name 2 mistakes that make visualizations misleading
-- [ ] What's the difference between a bar chart and a line chart?
-- [ ] Describe the three-act storytelling structure
-- [ ] How does your message change for different audiences?
+**Prompt 2 (chart choice):** "I want to show that one of our four shops declined sharply after a
+specific date, while the others stayed flat. Suggest three chart options, and for each one say what it
+makes obvious and what it hides."
+
+**Prompt 3 (titles):** "Rewrite these chart titles so each states a finding rather than naming a
+metric: 'Monthly Revenue', 'Revenue by Outlet', 'Ticket Value Distribution'. Explain what information
+you had to invent to do it, and what that tells me about writing good titles."
+
+---
+
+## **🧠 Quick Self-Check**
+
+Answer without scrolling up, then check below.
+
+1. What is pre-attentive processing, and what one design habit follows from it?
+2. Why must bar charts start at zero when line charts do not have to?
+3. Your chart is titled "Revenue by Outlet". What is wrong with that, and what would you write instead?
+4. You have twelve shops to compare over eighteen months. Twelve lines on one chart, or twelve small
+   panels? Why?
+5. Your audience is one person — the owner deciding on a lease. What do you cut from the chart you would
+   have shown your data-team colleagues?
 
 <details>
-<summary>💡 Suggested Answers</summary>
+<summary>💡 Suggested answers</summary>
 
-**Pre-attentive processing:** Your brain spots certain visual signals (colour, position, size) in 200–500 milliseconds — before you consciously look. It matters because insights that rely on pre-attentive attributes (e.g. a red bar among grey ones) are understood instantly, while insights buried in a table or a crowded chart require deliberate effort and may be missed entirely.
+**Q1:** Your visual system registers colour, length and position in about 200–500ms, before conscious
+attention. The habit that follows: use one accent colour for the single thing that matters and grey for
+everything else, so the point is found before it is read. A chart with five bright colours has no
+pre-attentive channel left — nothing stands out, so nothing is found early.
 
-**Two mistakes that make visualisations misleading:**
-1. Truncating a bar chart's y-axis (e.g. starting at 95 instead of 0) — makes tiny differences look dramatic.
-2. Using a 3D chart — the perspective distorts perceived area/angle and makes accurate comparison impossible.
+**Q2:** Because they encode value differently. A bar means "this length **is** this value", so a
+non-zero baseline makes the length dishonest. A line means "this is the position at this time", and it
+is read for *change* — so a zoomed axis is often what makes a real 3% move visible instead of a flat
+line. Bars: length, start at zero. Lines: position, truncate as needed for legibility.
 
-**Bar chart vs line chart:** A bar chart shows discrete, separate categories (e.g. sales per product). A line chart shows a continuous trend over time (e.g. daily revenue). Using a line chart for unrelated categories implies a connection that doesn't exist.
+**Q3:** It names the metric instead of stating the finding, so the reader has to work out the point for
+themselves — and readers who are skimming will not. Write the sentence you want them to leave with:
+"Marina Bay is falling and Holland Village is hiding it". If you cannot write that sentence, you do not
+yet know what the chart is for, which is a very useful thing to discover before the meeting rather than
+during it.
 
-**Three-act structure:** Act 1 — set the context ("why should you care?"). Act 2 — reveal the data insight using a visualisation. Act 3 — propose an action ("what should we do?"). The visualisation usually lives in Act 2 as the evidence behind the argument.
+**Q4:** Twelve small panels (small multiples), with a **shared y-axis**. Twelve lines on one set of axes
+is a spaghetti chart: it exceeds the attention budget and no single shop is followable. Small multiples
+make the *shapes* comparable at a glance. The shared axis is essential — without it each panel is scaled
+to its own data, and a small shop looks the same size as a large one.
 
-**Audience-adjusted messaging:**
-- Executive → ROI and the decision to make (high-level only).
-- Manager → specific actions and key drivers.
-- Data team → full methodology and data quality details.
-- General public → simple language, no jargon, personal relevance.
+**Q5:** Cut the uncertainty bands, the distributions, the methodology panels and the extra dimensions.
+Keep one chart, a title that states the finding, the cause annotated on it, and the one comparison that
+frames the decision (here: rent as a share of revenue). Nothing is being hidden — the detail still
+exists in your notebook and you bring it if asked. You are matching the depth to the decision.
 
 </details>
 
-**Missed some?** Skim that section again — it will make the Python lesson much more meaningful.
-
 ---
 
-## 🎯 How This Connects to the Python Lesson
+## **Reference**
 
-In Lesson 1.10 you'll work with **Matplotlib** and **Seaborn** — the two most widely used Python visualisation libraries. The principles you just reviewed are the *why* behind every code decision:
-
-- Choosing `plt.bar()` vs `plt.plot()` — that's the chart selection rule.
-- Calling `ax.grid(False)` or limiting the colour palette — that's cognitive load management.
-- Writing a descriptive title and annotation — that's storytelling.
-
-When you understand the principle, the code becomes a tool rather than a mystery. You're ready to begin.
-
----
-
-
-### Useful Links
-
-- [Data Visualization Introduction](https://www.tableau.com/learn/articles/data-visualization)
-- [10 Best Data Visualization Examples from History & Today](https://www.tableau.com/learn/articles/best-beautiful-data-visualization-examples)
+- [Data Visualization Introduction (Tableau)](https://www.tableau.com/learn/articles/data-visualization)
 - [Best Practices for Effective Data Visualization](https://www.thoughtspot.com/data-trends/data-visualization/best-practices-and-tips-for-effective-data-visualization)
+- [From Data to Viz — a chart chooser with code](https://www.data-to-viz.com/)
+- [Financial Times Visual Vocabulary — a one-page chart chooser, worth printing](https://github.com/Financial-Times/chart-doctor/blob/main/visual-vocabulary/poster.png)
+
+Deeper material — colour theory, accessibility, Gestalt principles and the research behind
+pre-attentive processing — is in [reference.md](./reference.md). It is optional, and genuinely
+interesting once the basics are in place.
